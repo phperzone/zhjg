@@ -2,7 +2,26 @@
 namespace Home\Controller;
 use Think\Controller;
 class LoginController extends Controller {
+	public $expert;#擅长领域
+	public $trades;#工种
+	function __construst(){
+		parent::__construst();
+		$this->expert = array(
+			'1'=>'建筑工程',
+			'2'=>'装修工程',
+			'3'=>'电力工程',
+			'4'=>'农林牧渔工程'
+			);
+		$this->trades = array(
+			'1'=>'高级技工',
+			'2'=>'中技工',
+			'3'=>'技工',
+			'4'=>'学工'
+			);
+	}
 	public function index(){
+		$this->assign('trades',$this->trades);
+		$this->assign('expert',$this->expert);
 		$this->display('login/login');
 	}
 	public function login(){
@@ -22,7 +41,6 @@ class LoginController extends Controller {
 	}
 	public function register(){
 		if(IS_POST){
-			echo 'ok';
 			$username = I('post.username');
 			if(1){
 
