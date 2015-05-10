@@ -18,14 +18,21 @@ class LoginController extends Controller {
 			'3'=>'技工',
 			'4'=>'学工'
 			);
+		C('TOKEN_ON',false);
 	}
 	public function index(){
-		$this->assign('trades',$this->trades);
-		$this->assign('expert',$this->expert);
-		$this->display('login/login');
+		if(IS_POST){
+			$this->login();
+		}else{
+			$this->assign('trades',$this->trades);
+			$this->assign('expert',$this->expert);
+			$this->assign('register_url',U('Login/register'));
+			$this->assign('login_url',U('Login/login'));
+			$this->display('login/login');
+		}
 	}
 	public function login(){
-		$User = M("User"); // 实例化User对象
+		$User = D("User"); // 实例化User对象
 		 // 手动进行令牌验证
 		 if (!$User->autoCheckToken($_POST)){
 		 // 令牌验证错误
@@ -33,17 +40,40 @@ class LoginController extends Controller {
 		 	$this->ajaxReturn($_d);
 		 }
 		 $username = I('post.username');
-		 $pwd = I('post.pwd');
+		 $pwd = I('post.passwd');
 		 if($username && $pwd){
 		 	$userinfo = $User->checkuser($username,$pwd);
+		 	print_r($userinfo);
+		 	if($userinfo){
+		 		$this->success('登陆成功',U('Index/index'));
+// 				$data['status'] = 1;
+// 				$data['url'] = U('Index/index');
+				
+		 	}else{
+// 		 		$data['status'] = 0 ;
+// 		 		$data['url'] = U('Login');
+// 		 		$this->error('登陆信息有误，请重新填写',U('Login/index'));
+		 	}
+// 		 	$this->ajaxReturn($data);
 		 }
-
+		
 	}
 	public function register(){
 		if(IS_POST){
-			$username = I('post.username');
-			if(1){
-
+// 			print_r($_POST);
+			$User = D("User"); // 实例化User对象
+			#create 方法自动校验
+// 			if (!$User->autoCheckToken($_POST)){ 
+// 				$this->error('令牌错误'); 
+// 			}
+			if (!$User->create()){ // 创建数据对象     // 如果创建失败 表示验证没有通过 输出错误提示信息    
+				 exit($User->getError());
+			}else{     // 验证通过 写入新增数据
+				$User->salt = generate_rand(6);   
+				 $User->passwd = md5(md5($User->passwd).$User->salt);
+				 if($User->add()){
+				 	$this->success('注册成功',U('Login/index'));
+				 }
 			}
 		}else{
 			$this->display('login/register');
