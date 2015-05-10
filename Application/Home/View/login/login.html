@@ -41,7 +41,7 @@
 							submitHandler: function(form)
 							{
 								show_loading_bar(70); // Fill progress bar to 70% (just a given value)
-								
+								//alert(1111111);
 								var opts = {
 									"closeButton": true,
 									"debug": false,
@@ -58,13 +58,14 @@
 								};
 									
 								$.ajax({
-									url: "{:U('Home/Login/login')}",
+									url: "{$login_url}",
 									method: 'POST',
 									dataType: 'json',
 									data: {
 										do_login: true,
 										username: $(form).find('#username').val(),
 										passwd: $(form).find('#passwd').val(),
+										__hash__: $(form).find('name=[__hash__]').val(),
 									},
 									success: function(resp)
 									{
@@ -74,12 +75,12 @@
 											finish: function(){
 												
 												// Redirect after successful login page (when progress bar reaches 100%)
-												if(resp.accessGranted){
-													window.location.href = "{:U('Home/Index')}";
+												if(resp.status){
+													alert('登陆成功');
 												}else{
-													toastr.error("You have entered wrong password, please try again. User and password is <strong>demo/demo</strong> :)", "Invalid Login!", opts);
-													$passwd.select();
+													alert('登陆失败，请重新登陆');
 												}
+												window.location.href = resp.url;
 																						}
 										});
 										
@@ -101,7 +102,7 @@
 				</div>
 				
 				<!-- Add class "fade-in-effect" for login form effect -->
-				<form method="post" role="form" id="login" class="login-form fade-in-effect">
+				<form method="post" role="form" id="login" action="{$login_url}" class="login-form fade-in-effect">
 					
 					<div class="login-header">
 						<a href="dashboard-1.html" class="logo">
@@ -129,7 +130,12 @@
 							Log In
 						</button>
 					</div>
-					
+					<div class="form-group">
+						
+							
+							<a href='{$register_url}'>Register
+						
+					</div>
 					<div class="login-footer">
 						<a href="#">Forgot your password?</a>
 						
