@@ -134,6 +134,16 @@
 										do_login: true,
 										username: $(form).find('#username').val(),
 										passwd: $(form).find('#passwd').val(),
+										age: $(form).find('#age').val(),
+										identity: $(form).find('#identity').val(),
+										address: $(form).find('#address').val(),
+										alipay: $(form).find('#alipay').val(),
+										phone: $(form).find('#phone').val(),
+										passwd: $(form).find('#passwd').val(),
+										trades: $(form).find('#trades').val(),
+										expert: $(form).find('#expert').val(),
+										__hash__: $(form).find('name=[__hash__]').val(),
+
 									},
 									success: function(resp){
 										show_loading_bar({
@@ -142,8 +152,8 @@
 											finish: function(){
 												
 												// Redirect after successful login page (when progress bar reaches 100%)
-												if(resp.accessGranted){
-													window.location.href = "<?php echo U('Home/Login/');?>";
+												if(resp.status){
+													window.location.href = resp.url;
 												}else{
 													toastr.error("You have entered wrong password, please try again. User and password is <strong>demo/demo</strong> :)", "Invalid Login!", opts);
 													$passwd.select();
@@ -209,8 +219,26 @@
 						<label class="control-label" for="alipay">alipay</label>
 						<input type="text" class="form-control input-dark" name="alipay" id="alipay" autocomplete="off" />
 					</div>
-					
-					
+					<div class="form-group">
+						<label class="control-label" for="expert">expert</label>
+						<select name='expert' class="form-control" id='expert'>
+							<option value="1">建筑工程</option>
+							<option value="2">装修工程</option>
+							<option value="3">电力工程</option>
+							<option value="4">农林牧渔工程</option>
+						</select>
+						<!-- <input type="text" class="form-control input-dark" name="expert" id="expert" autocomplete="off" /> -->
+					</div>
+					<div class="form-group">
+						<label class="control-label" for="trades">trades</label>
+						<select name='trades' class="form-control" id='trades'>
+							<option value="1">高级技工</option>
+							<option value="2">中技工</option>
+							<option value="3">技工</option>
+							<option value="4">学工</option>
+						</select>
+						<!-- <input type="text" class="form-control input-dark" name="expert" id="expert" autocomplete="off" /> -->
+					</div>
 					<div class="form-group">
 						<button type="submit" class="btn btn-dark  text-left">
 							<!-- <i class="fa-lock"></i> -->
