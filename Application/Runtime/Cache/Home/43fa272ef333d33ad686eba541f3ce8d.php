@@ -1,1 +1,0 @@
-<?php if (!defined('THINK_PATH')) exit();?><h2> hello world !!!</h2>
